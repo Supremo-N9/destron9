@@ -1,0 +1,57 @@
+import socket
+import os
+from PIL import Image
+from pydub import AudioSegment
+import PyPDF2
+
+def send_file(host, port, file_path):
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((host, port))
+
+    file_name = file_path.split("/")[-1]
+    client_socket.send(file_name.encode())
+
+    file_extension = os.path.splitext(file_path)[1]
+
+    if file_extension.lower() == ".jpg" or file_extension.lower() == ".png":
+        # Transferir imágenes
+        image = Image.open(file_path)
+        image.save(client_socket, "JPEG" if file_extension.lower() == ".jpg" else "PNG")
+    elif file_extension.lower() == ".mp3" or file_extension.lower() == ".wav":
+        # Transferir archivos de música
+        audio = AudioSegment.from_file(file_path, format=file_extension[1:])
+        audio.export(client_socket, format=file_extension[1:])
+    elif file_extension.lower() == ".pdf":
+        # Transferir archivos PDF
+        with open(file_path, 'rb') as file:
+            pdf_reader = PyPDF2.PdfReader(file)
+            for page in pdf_reader.pages:
+                client_socket.sendall(page.extract_text().encode())
+
+    print("Transferencia de archivo completada.")
+
+    client_socket.close()
+
+# Crear la carpeta SN9Destro si no existe
+folder_name = "SN9Destro"
+if not os.path.exists(folder_name):
+    os.makedirs(folder_name)
+
+# Mensaje personalizado
+print("╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╮╱╭┳━━━╮")
+print("┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╰╮┃┃╭━╮┃")
+print("┃╰━━┳╮╭┳━━┳━┳━━┳╮╭┳━━┫╭╮╰╯┃╰━╯┃")
+print("╰━━╮┃┃┃┃╭╮┃╭┫┃━┫╰╯┃╭╮┃┃╰╮┃┣━━╮┃")
+print("┃╰━╯┃╰╯┃╰╯┃┃┃┃━┫┃┃┃╰╯┃┃╱┃┃┣━━╯┃")
+print("╰━━━┻━━┫╭━┻╯╰━━┻┻┻┻━━┻╯╱╰━┻━━━╯")
+print("╱╱╱╱╱╱╱┃┃")
+print("╱╱╱╱╱╱╱╰╯")
+print("SupremoN9 - Bienvenido a Destroyer v2.4")
+print("Created BY N9")
+print("Sígueme en Instagram: supremon9\n")
+
+host = input("ip/host: ")
+port = int(input("port: "))
+file_path = input("Ingrese la ruta del archivo a enviar: ")
+
+send_file(host, port, file_path)
