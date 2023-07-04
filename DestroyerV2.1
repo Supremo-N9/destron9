@@ -4,6 +4,20 @@ from PIL import Image
 from pydub import AudioSegment
 import PyPDF2
 
+# Función para imprimir en color
+def print_color(message, color):
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'purple': '\033[95m',
+        'cyan': '\033[96m',
+        'white': '\033[97m',
+    }
+    end_color = '\033[0m'
+    print(colors[color] + message + end_color)
+
 def send_file(host, port, file_path):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host, port))
@@ -28,27 +42,22 @@ def send_file(host, port, file_path):
             for page in pdf_reader.pages:
                 client_socket.sendall(page.extract_text().encode())
 
-    print("Transferencia de archivo completada.")
+    print_color("Transferencia de archivo completada.", "green")
 
     client_socket.close()
 
-# Crear la carpeta SN9Destro si no existe
-folder_name = "SN9Destro"
-if not os.path.exists(folder_name):
-    os.makedirs(folder_name)
-
 # Mensaje personalizado
-print("╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╮╱╭┳━━━╮")
-print("┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╰╮┃┃╭━╮┃")
-print("┃╰━━┳╮╭┳━━┳━┳━━┳╮╭┳━━┫╭╮╰╯┃╰━╯┃")
-print("╰━━╮┃┃┃┃╭╮┃╭┫┃━┫╰╯┃╭╮┃┃╰╮┃┣━━╮┃")
-print("┃╰━╯┃╰╯┃╰╯┃┃┃┃━┫┃┃┃╰╯┃┃╱┃┃┣━━╯┃")
-print("╰━━━┻━━┫╭━┻╯╰━━┻┻┻┻━━┻╯╱╰━┻━━━╯")
-print("╱╱╱╱╱╱╱┃┃")
-print("╱╱╱╱╱╱╱╰╯")
-print("SupremoN9 - Bienvenido a Destroyer v2.4")
-print("Created BY N9")
-print("Sígueme en Instagram: supremon9\n")
+print_color("╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╮╱╭┳━━━╮", "cyan")
+print_color("┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╰╮┃┃╭━╮┃", "cyan")
+print_color("┃╰━━┳╮╭┳━━┳━┳━━┳╮╭┳━━┫╭╮╰╯┃╰━╯┃", "cyan")
+print_color("╰━━╮┃┃┃┃╭╮┃╭┫┃━┫╰╯┃╭╮┃┃╰╮┃┣━━╮┃", "cyan")
+print_color("┃╰━╯┃╰╯┃╰╯┃┃┃┃━┫┃┃┃╰╯┃┃╱┃┃┣━━╯┃", "cyan")
+print_color("╰━━━┻━━┫╭━┻╯╰━━┻┻┻┻━━┻╯╱╰━┻━━━╯", "cyan")
+print_color("╱╱╱╱╱╱╱┃┃", "cyan")
+print_color("╱╱╱╱╱╱╱╰╯", "cyan")
+print_color("SupremoN9 - Bienvenido a Destroyer v2.4", "yellow")
+print_color("Created BY N9", "yellow")
+print_color("Sígueme en Instagram: supremon9\n", "yellow")
 
 host = input("ip/host: ")
 port = int(input("port: "))
